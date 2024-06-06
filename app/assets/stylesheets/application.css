@@ -13,3 +13,10 @@
  *= require_tree .
  *= require_self
  */
+.hilite {
+  background-color: yellow; /* Adjust the color as needed */
+}
+
+.bg-warning {
+  background-color: orange; /* Bootstrap class for warning background */
+}
