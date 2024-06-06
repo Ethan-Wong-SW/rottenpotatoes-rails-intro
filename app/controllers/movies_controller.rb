@@ -8,19 +8,24 @@ class MoviesController < ApplicationController
 
   def index
     @all_ratings = Movie.all_ratings
-    # Set up the ratings filter
+    # Check if there are params for ratings or sorting
     if params[:ratings].present?
       @ratings_to_show = params[:ratings].keys
+      session[:ratings] = @ratings_to_show
+    elsif session[:ratings].present?
+      @ratings_to_show = session[:ratings]
     else
       @ratings_to_show = @all_ratings
     end
+    if params[:sort].present?
+      @sort_column = params[:sort]
+      session[:sort] = @sort_column
+    elsif session[:sort].present?
+      @sort_column = session[:sort]
+    end
     @ratings_to_show_hash = @ratings_to_show.map { |rating| [rating, "1"] }.to_h
     @movies = Movie.with_ratings(@ratings_to_show)
-    # Handle sorting
-    if params[:sort].present?
-      @movies = @movies.order(params[:sort])
-      @sort_column = params[:sort]
-    end
+    @movies = @movies.order(@sort_column) if @sort_column.present?
   end
 
   def new
